@@ -41,3 +41,4 @@
 <script src="{{asset('backend/js/dashboard.js') }}"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('backend/js/demo.js') }}"></script>
+<script src="{{asset('js/script.js') }}"></script>

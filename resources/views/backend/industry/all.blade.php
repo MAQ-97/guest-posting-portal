@@ -36,7 +36,10 @@
                                         <td>{{$key+1}}</td>
                                         <td>{{$industry->industry}}</td>
                                         <td>{{$industry->created_at->format('d/m/Y')}}</td>
+                                      
+                                     
                                         <td>
+                                        @hasrole('admin')
                                             <a href="{{ URL::to('industry/'.$industry->id.'/edit') }}"
                                                class="btn btn-info pull-left" style="margin-right: 3px;"><i
                                                     class="fa fa-pencil" aria-hidden="true"></i></a>
@@ -45,7 +48,15 @@
                                             {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
                                             {!! Form::close() !!}
 
+
+                                            @else
+                                            <a href="{{ URL::to('industry/'.$industry->id.) }}"
+                                               class="btn btn-success pull-left" style="margin-right: 3px;"><i
+                                                    class="fa fa-eye" aria-hidden="true"></i></a>
+
+                                            @endrole
                                         </td>
+                                 
                                     </tr>
                                 @endforeach
                                 </tbody>

@@ -17,19 +17,28 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('Home');
 
-Route::resource('users', 'UserController');
+    Route::group(['middleware' => ['isAdmin', 'auth']], function() {
+        Route::resource('users', 'UserController');
+        Route::resource('roles', 'RoleController');
+        Route::resource('permissions', 'PermissionController');
+        Route::resource('keywords', 'KeywordController');
+        Route::resource('industry', 'IndustryController');
+      });
 
-Route::resource('roles', 'RoleController');
+      Route::resource('blogs', 'BlogController')->middleware('auth');
+      Route::get('/blogs/list', 'BlogController@show')->name('blogs.bloglist')->middleware('auth');
+      Route::post('/blogs/searchresult','BlogController@blog_search')->name('blogs.searchresult');
+      Route::post('/blogs/add_to_cart','BlogController@add_to_cart')->name('blogs.add_to_cart');
+      Route::post('/blogs/add_to_cart_update','BlogController@add_to_cart_update')->name('blogs.add_to_cart_update');
+      Route::get('/cart','BlogController@cart')->name('blog.cart')->middleware('auth');
+      Route::post('/cart_update','BlogController@cart_update')->name('blog.cart_update');
+      Route::post('/cart_delete','BlogController@cart_delete')->name('blog.cart_delete');
+      Route::get('/checkout','BlogController@checkout')->name('blog.checkout')->middleware('auth');
+      
+      Route::resource('orders', 'OrderController')->middleware('auth');
+    //   Route::post('/orders/update/{id}', 'OrderController@update')->name('orders.update');
 
-Route::resource('permissions', 'PermissionController');
 
-Route::resource('blogs', 'BlogController');
-
-Route::resource('keywords', 'KeywordController');
-
-Route::resource('orders', 'OrderController');
-
-Route::resource('industry', 'IndustryController');
 

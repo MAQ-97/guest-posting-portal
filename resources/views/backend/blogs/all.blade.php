@@ -7,96 +7,187 @@
             <h1>
                 Blogs
                 <small>All Blog</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#" class="active">Blogs</a></li>
-            </ol>
+
+                <ol class="breadcrumb">
+                    <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                    <li><a href="#" class="active">Blogs</a></li>
+                </ol>
+
         </section>
 
-        <!-- Main content -->
-        <section class="content">
+
+        <section class="content min-height-0">
+
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
+                <form method="post" enctype="multipart/form-data" action="{{route('blogs.searchresult')}}">
+                    <div class="col-md-8">
                         <div class="box-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>link</th>
-                                    <th>Title</th>
-                                    <th>Price</th>
-                                    <th>DA</th>
-                                    <th>Fb Likes</th>
-                                    <th>Followers</th>
-                                    <th>Dropped</th>
-                                    {{--                                    <th>Flagged</th>--}}
-                                    <th>Created Date</th>
-                                    <th>operation</th>
-                                    {{--                                    <th>description</th>--}}
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach ($blogs as $key => $blog)
-                                    <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{ $blog->link }}</td>
-                                        <td>{{ $blog->title}}</td>
-                                        <td>${{ $blog->price}}</td>
-                                        <td>{{$blog->da}}</td>
-                                        <td>{{$blog->fb_likes}}</td>
-                                        <td>{{$blog->follower}}</td>
-                                        @if($blog->dropped != 'false')
-                                            <td><img src="{{asset('backend/img/tick-blue-icon.png')}}"
-                                                     style="max-height:25px;max-width:30px;" data-toggle="popover"
-                                                     data-placement="top" data-html="true" title=""
-                                                     data-content="This domain has never been expired and delete in the past, <br/>so there is very little chance its part of a public blog network. <br/><b>Click to see domain history</b>."
-                                                     data-original-title="Domain has never been expired, deleted and reused">
-                                            </td>
-                                        @else
-                                            <td>
-                                                <img src="{{asset('backend//img/glass-icon.png') }}"
-                                                     style="max-height:25px;max-width:30px;" data-toggle="popover"
-                                                     data-placement="top" data-html="true" title=""
-                                                     data-content="This domain has expired in the past, most are fine but some<br/> are turned into public blog networks so please check<br/><b>Click to see domain history</b>."
-                                                     data-original-title="Domain has been expired, deleted and reused"
-                                                     aria-describedby="popover198091">
-                                            </td>
-                                        @endif
-                                        <td>{{$blog->created_at->format('d/m/Y')}}</td>
-                                        <td>
-                                            <a href="{{ URL::to('blogs/'.$blog->id.'/edit') }}"
-                                               class="btn btn-info pull-left" style="margin-right: 3px;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-
-                                            {!! Form::open(['method' => 'DELETE', 'route' => ['blogs.destroy', $blog->id] ]) !!}
-                                            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                                            {!! Form::close() !!}
-
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <th>S.No</th>
-                                    <th>link</th>
-                                    <th>Title</th>
-                                    <th>Created Date</th>
-                                    <th>operation</th>
-                                </tr>
-                                </tfoot>
-                            </table>
+                            <input type="hidden" value="{{csrf_token()}}" name="_token"/>
+                            <input class="form-control input-lg" name="keyword" type="text"
+                                   placeholder="Search by keyword, URL">
                         </div>
-                        <!-- /.box-body -->
                     </div>
-                    <!-- /.box -->
-                </div>
-                <!-- /.col -->
+                    <div class="col-md-4">
+                        <div class="box-body">
+                            <button type="submit" class="btn btn-block btn-primary btn-lg">Search</button>
+                        </div>
+                </form>
             </div>
-            <!-- /.row -->
+
         </section>
-        <!-- /.content -->
+
+    @php
+        $user_ids = [];
+        $blogs_id = [];
+        $logs_details = [];
+        $blogs="";
+
+        $logs = \App\order_log::where(['user_id' => Auth::user()->id])->get();
+
+        foreach ($logs as $key => $arr){
+
+           $previous_logs = unserialize($arr->meta_value);
+
+           foreach ($previous_logs as $i => $arr_val){
+                $blogs_id[] = $arr_val['blog_id'];
+           }
+
+        }
+
+    @endphp
+
+    <!-- Main content -->
+
+    @isset($result)
+        <!-- dd($result); -->
+            <section class="content">
+
+                <div class="row">
+
+                    @forelse($result as $key => $blog)
+
+                        <form method="post" class="add_to_cart_form" enctype="multipart/form-data" action="{{route('blogs.add_to_cart')}}">
+                            <div class="col-md-4">
+                                <input type="hidden" value="{{csrf_token()}}" name="_token"/>
+                                <!-- Widget: user widget style 1 -->
+                                <div class="box box-widget widget-user">
+                                    <!--style="background: url('{{asset('storage/'.$blog->blog->blog_image)}}') center center;height: 200px;background-size: cover;" Add the bg color to the header custom-bg-blog using any of the bg-* classes -->
+
+                                    <div class="widget-user-header" @if($blog->blog->blog_image) style="background: url('{{asset('storage/'.$blog->blog->blog_image)}}') center center;height: 200px;background-size: cover;"  @else style="background-color: firebrick;height: 200px;background-size: cover;"  @endif>
+                                        <h3 class="widget-user-username" style="color: white;text-shadow: 0px 0px 5px black;">{{$blog->blog->title}}</h3>
+                                        <h5 class="widget-user-desc" style="color: white;text-shadow: 0px 0px 5px black;">
+                                            {{strip_tags(substr($blog->blog->description ,0 , 120))."..." }}
+                                        </h5>
+                                    </div>
+                                    <!-- <div class="widget-user-image">
+                                      <img class="img-circle" src="../dist/img/user3-128x128.jpg" alt="User Avatar">
+                                    </div> -->
+                                    <div class="box-footer">
+                                        <div class="row">
+                                            <div class="col-sm-4 border-right">
+                                                <div class="description-block">
+                                                    <h5 class="description-header">{{$blog->blog->blog_meta[0]->meta_value}}</h5>
+                                                    <span class="description-text">DA</span>
+                                                </div>
+                                                <!-- /.description-block -->
+                                            </div>
+                                            <!-- /.col -->
+                                            <div class="col-sm-4 border-right">
+                                                <div class="description-block">
+                                                    <h5 class="description-header">{{$blog->blog->blog_meta[2]->meta_value}}</h5>
+                                                    <span class="description-text">FOLLOWERS</span>
+                                                </div>
+                                                <!-- /.description-block -->
+                                            </div>
+                                            <!-- /.col -->
+                                            <div class="col-sm-4">
+                                                <div class="description-block">
+                                                    <h5 class="description-header">{{$blog->blog->blog_meta[1]->meta_value}}</h5>
+                                                    <span class="description-text">FB</span>
+                                                </div>
+                                                <!-- /.description-block -->
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+                                        <div class="row">
+                                            <!-- /.col -->
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="description-block hidden-fields">
+
+                                                    <h5 class="description-header">
+                                                        ${{number_format($blog->blog->price,0)}}</h5>
+                                                    <span class="description-text">Price</span>
+
+
+                                                    <input type="hidden" name="title" class="cart_title"
+                                                           value="{{ $blog->blog->title}}"/>
+                                                    <input type="hidden" class="cart_web_url" name="url"
+                                                           value="{{url('/blogs/add_to_cart')}}"/>
+                                                    <input type="hidden" name="description" class="cart_description"
+                                                           value="{{ $blog->blog->description}}"/>
+                                                    <input type="hidden" name="price" class="cart_price"
+                                                           value="{{ $blog->blog->price}}"/>
+                                                    <input type="hidden" name="da" class="cart_da"
+                                                           value="{{$blog->blog->blog_meta[0]->meta_value}}"/>
+                                                    <input type="hidden" name="fb" class="cart_fb"
+                                                           value="{{$blog->blog->blog_meta[1]->meta_value}}"/>
+                                                    <input type="hidden" name="follower" class="cart_follower"
+                                                           value="{{$blog->blog->blog_meta[2]->meta_value}}"/>
+                                                    <input type="hidden" name="user_id" class="cart_user_id"
+                                                           value="{{Auth::user()->id }}"/>
+                                                    <input type="hidden" name="blog_id" class="cart_blog_id"
+                                                           value="{{$blog->blog->id}}"/>
+                                                           <input type="hidden" name="blog_image" class="cart_blog_image"
+                                                           value="{{$blog->blog->blog_image}}"/>       
+                                                <!-- <h5 class="description-header">{{$blog->blog->price}}</h5> -->
+                                                    {{--                                                    <span class="description-text">--}}
+                                                    {{--                                                         <button class="btn btn-block btn-success addtocart" type="submit" name="add-to-cart">Starting At $ {{$blog->blog->price}}</button>--}}
+                                                    {{--                                                    </span>--}}
+                                                </div>
+                                                <!-- /.description-block -->
+                                            </div>
+                                            <div class="col-md-2 col-lg-4"></div>
+                                            <div class="col-md-4 col-sm-6">
+                                                <div class="description-block ">
+                                                     <span class="description-text addToCart-button-section">
+                                                          @if(in_array($blog->blog->id ,array_unique($blogs_id) ))
+                                                              <input type="hidden" exists_blog_id="{{$blog->blog->id}}" class="cart_exists_blog_id">
+                                                          @else
+                                                             <input type="hidden" exists_blog_id="null" class="cart_exists_blog_id">
+                                                          @endif
+
+
+                                                          <label for="" class="label label-success addedLabel">Added</label>
+
+                                                          <button class="btn btn-success addtocart" type="submit" name="add-to-cart">Add to cart</button>
+
+                                                         {{--                                                                     name="add-to-cart">Add to cart</button>
+{{--                                                         @if(in_array($blog->blog->id ,array_unique($blogs_id) ))--}}
+{{--                                                             <label for="" class="label label-success addedLabel">Added</label>--}}
+{{--                                                         @else--}}
+{{--                                                             <button class="btn btn-success addtocart" type="submit"--}}
+{{--                                                                     name="add-to-cart">Add to cart</button>--}}
+{{--                                                         @endif--}}
+                                                     </span>
+                                                </div>
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+                                        <!-- /.row -->
+                                    </div>
+                                </div>
+                                <!-- /.widget-user -->
+                            </div>
+                        </form>
+                    @empty
+                        <h2 class='text-center'>No Blog Found</h2>
+                @endforelse
+                <!-- /.col -->
+                </div>
+            </section>
+
+    @endisset
+    <!-- /.content -->
     </div>
 @endsection
 

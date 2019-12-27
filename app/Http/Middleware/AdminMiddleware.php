@@ -17,16 +17,11 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        $user = User::all()->count();
-
-        if (!($user == 1)) {
-            if (!Auth::user()->hasRole('admin'))//If user does //not have this permission
-            {
-//                dd('here');
-                abort('401');
-            }
-        }
-
-        return $next($request);
+        // $user = User::all()->count();
+        if (Auth::check() && Auth::user()->hasRole('admin') ) {
+            return $next($request);
+        }else{
+            return redirect()->route('Home');
+        }  
     }
 }

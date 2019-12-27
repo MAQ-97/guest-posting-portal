@@ -1,6 +1,9 @@
 @extends('layouts.backend.app')
 
 @section('section')
+@php
+    $num=1;
+@endphp
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -24,9 +27,9 @@
                                 <thead>
                                 <tr>
                                     <th>S.No</th>
-                                    <th>User Name</th>
-                                    <th>Keyword</th>
+                                    <th>UserName</th>
                                     <th>Order Status</th>
+                                    <th>Total Amount</th>
                                     <th>Created Date</th>
                                     <th>operation</th>
                                     {{--                                    <th>description</th>--}}
@@ -35,29 +38,33 @@
                                 <tbody>
                                 @foreach ($orders as $key => $order)
                                     <tr>
-                                        <td>{{$key+1}}</td>
-                                        <td>{{ $order->username }}</td>
-                                        <td>{{ $order->keyword}}</td>
-                                        <td>${{ $order->status}}</td>
-                                        <td>{{$order->created_at->format('d/m/Y')}}</td>
+                                    <td>{{$num++}}</td>
+                                        <td>{{$order->user->name}}</td>
+                                        <td>{{$order->status}}</td>
+                                        <td> $ {{$order->total_amount}}</td>
+                                        <td>{{date('d-m-Y', strtotime($order->created_at))}}</td>
                                         <td>
-                                            <a href="{{ URL::to('blogs/'.$blog->id.'/edit') }}"
-                                               class="btn btn-info pull-left" style="margin-right: 3px;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                        @hasrole('admin')
+                                        
+                                        <a href="{{action('OrderController@edit',$order->id)}}" class="btn btn-info" style="margin-right: 3px;"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                                        <a href="{{action('OrderController@destroy',$order->id)}}" class="btn btn-danger" style="margin-right: 3px;"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                                        
+                                        @else
+                                        <a href="{{action('OrderController@show',$order->id)}}"
+                                               class="btn btn-success pull-left" style="margin-right: 3px;"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
-                                            {!! Form::open(['method' => 'DELETE', 'route' => ['blogs.destroy', $blog->id] ]) !!}
-                                            {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                                            {!! Form::close() !!}
-
+                                        @endrole
                                         </td>
+                                   
                                     </tr>
                                 @endforeach
                                 </tbody>
                                 <tfoot>
                                 <tr>
                                     <th>S.No</th>
-                                    <th>User Name</th>
-                                    <th>Keyword</th>
+                                    <th>UserName</th>
                                     <th>Order Status</th>
+                                    <th>Total Amount</th>
                                     <th>Created Date</th>
                                     <th>operation</th>
                                 </tr>

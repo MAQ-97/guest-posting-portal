@@ -23,8 +23,11 @@
         </form>
         <!-- /.search form -->
         <!-- sidebar menu: : style can be found in sidebar.less -->
+
+
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">MAIN NAVIGATION</li>
+            @hasrole('admin')
             <li class="active treeview">
                 <a href="#">
                     <i class="fa fa-user"></i> <span>User</span>
@@ -33,10 +36,12 @@
             </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="active"><a href="{{route('users.index')}}"><i class="fa fa-circle-o"></i> All User</a></li>
+                    <li class="active"><a href="{{route('users.index')}}"><i class="fa fa-circle-o"></i> All User</a>
+                    </li>
                     <li><a href="{{route('users.create')}}"><i class="fa fa-circle-o"></i> Add User</a></li>
                 </ul>
             </li>
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-key"></i> <span>Roles</span>
@@ -57,10 +62,13 @@
             </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class=""><a href="{{route('permissions.index')}}"><i class="fa fa-circle-o"></i> All Permissions</a></li>
+                    <li class=""><a href="{{route('permissions.index')}}"><i class="fa fa-circle-o"></i> All Permissions</a>
+                    </li>
                     <li><a href="{{route('permissions.create')}}"><i class="fa fa-circle-o"></i> Add Permission</a></li>
                 </ul>
             </li>
+
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-font"></i><span>Keywords</span>
@@ -69,10 +77,13 @@
             </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class=""><a href="{{route('keywords.index')}}"><i class="fa fa-circle-o"></i> All Keywords</a></li>
+                    <li class=""><a href="{{route('keywords.index')}}"><i class="fa fa-circle-o"></i> All Keywords</a>
+                    </li>
                     <li><a href="{{route('keywords.create')}}"><i class="fa fa-circle-o"></i> Add keyword</a></li>
                 </ul>
             </li>
+
+
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-industry"></i><span>Industries</span>
@@ -81,10 +92,12 @@
             </span>
                 </a>
                 <ul class="treeview-menu">
-                    <li class=""><a href="{{route('industry.index')}}"><i class="fa fa-circle-o"></i> All Industries</a></li>
+                    <li class=""><a href="{{route('industry.index')}}"><i class="fa fa-circle-o"></i> All Industries</a>
+                    </li>
                     <li><a href="{{route('industry.create')}}"><i class="fa fa-circle-o"></i> Add Industry</a></li>
                 </ul>
             </li>
+            @endrole
             <li class="treeview">
                 <a href="#">
                     <i class="fa fa-sticky-note-o"></i><span>Blogs</span>
@@ -92,10 +105,17 @@
               <i class="fa fa-angle-left pull-right"></i>
             </span>
                 </a>
+
                 <ul class="treeview-menu">
-                    <li class=""><a href="{{route('blogs.index')}}"><i class="fa fa-circle-o"></i> All Blogs</a></li>
-                    <li><a href="{{route('blogs.create')}}"><i class="fa fa-circle-o"></i> Add Blog</a></li>
+                    @hasrole('admin')
+                        <li><a href="{{route('blogs.create')}}"><i class="fa fa-circle-o"></i> Add Blog</a></li>
+                        <li><a href="{{route('blogs.bloglist')}}"><i class="fa fa-circle-o"></i> Blog List</a></li>
+                    @else
+                        <li class=""><a href="{{route('blogs.index')}}"><i class="fa fa-circle-o"></i> All Blogs</a></li>
+                    @endrole
+
                 </ul>
+
             </li>
 
 
@@ -107,8 +127,12 @@
             </span>
                 </a>
                 <ul class="treeview-menu">
+                    @hasrole('admin')
                     <li class=""><a href="{{route('orders.index')}}"><i class="fa fa-circle-o"></i> All Orders</a></li>
-{{--                    <li><a href="{{route('orders.create')}}"><i class="fa fa-circle-o"></i> Add keyword</a></li>--}}
+                    @else
+                        <li class=""><a href="{{route('orders.index')}}"><i class="fa fa-circle-o"></i> My Orders</a>
+                        </li>
+                    @endrole
                 </ul>
             </li>
         </ul>

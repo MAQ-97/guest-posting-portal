@@ -1,0 +1,54 @@
+ public function add_to_cart(Request $request)
+    {
+        $log_details = order_log::all();
+        $new_data = $request->all();
+        $current_user_id = $new_data['user_id'];
+
+        if (count($log_details) == 0) {
+            //echo "no record found";
+            $log = new order_log();
+            $arr_ = array($new_data);
+            $log->user_id = $current_user_id;
+            $log->meta_key = 'add-to-cart-details';
+            $log->meta_value = serialize($arr_);
+            $log->save();
+
+        } else {
+
+            foreach ($log_details as $log_detail) {
+
+                $user_id = (!empty($log_detail->user_id) ? $log_detail->user_id : "0");
+
+                if ($user_id == $current_user_id) {
+
+                    $previous_logs = unserialize($log_detail->meta_value);
+                    $prev_arrays = count($previous_logs);
+
+                    $new_logs = $new_data;
+                    $main_arr ['0'] = $new_logs;
+                    //var_dump($main_arr);
+
+                    //var_dump($prev_arrays);
+                    for($i = 0 ; $i < $prev_arrays ; $i++ ){
+                        foreach ($previous_logs as $key => $arr) {
+                            $main_arr [$i+1] = $arr;
+                        }
+                    }
+                    //var_dump($main_arr);
+
+                    order_log::where(['user_id' => $current_user_id])->update([
+                        "meta_key" => 'add-to-cart-details',
+                        "meta_value" => serialize($main_arr)
+                    ]);
+
+                } else {
+                    $log = new order_log();
+                    $log->user_id = $current_user_id;
+                    $log->meta_key = 'add-to-cart-details';
+                    $log->meta_value = serialize($new_data);
+                    $log->save();
+                }
+
+            }
+        }
+    }

@@ -24,8 +24,6 @@ class   CreateBlogKeywordsTable extends Migration
             $table->foreign('blog_id')->references('id')->on('blogs') ->onDelete('cascade');
             $table->foreign('keyword_id') ->references('id')->on('keywords')
                 ->onDelete('cascade');
-
-
         });
     }
 

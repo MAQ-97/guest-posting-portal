@@ -6,12 +6,12 @@
         <section class="content-header">
             <h1>
                 Blogs
-                <small>Add Blog</small>
+                <small>Show blog</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
                 <li><a href="#">Blogs</a></li>
-                <li class="active">Add Blog</li>
+                <li class="active">Show Blog</li>
             </ol>
         </section>
         <section class="content">
@@ -19,54 +19,57 @@
                 <div class="col-md-12">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title"><i class='fa fa-key'></i> Add Blogs</h3>
+                            <h3 class="box-title"><i class='fa fa-key'></i> Show Blog</h3>
                         </div>
 
-                        <div class="col-md-9">
-                            {{ Form::open(array('url' => 'blogs')) }}
-                            {{--            @csrf--}}
+                        <div class="col-md-6">
+                            {{ Form::model($blog, array('route' => array('blogs.update', $blog->id), 'method' => 'PUT')) }}{{-- Form model binding to automatically populate our fields with permission data --}}
                             <div class="form-group">
                                 {{ Form::label('link', 'Blog Link') }}
-                                {{ Form::text('link', '', array('class' => 'form-control')) }}
+                                {{ Form::text('link', null, array('class' => 'form-control','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
                                 {{ Form::label('name', 'Blog Title') }}
-                                {{ Form::text('title', '', array('class' => 'form-control')) }}
+                                {{ Form::text('title', null, array('class' => 'form-control','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
                                 {{ Form::label('name', 'Description') }}
-                                {{ Form::textarea('description', '', array('class' => 'form-control textarea')) }}
+                                {{ Form::textarea('description', null, array('class' => 'form-control textarea','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
                                 {{ Form::label('name', 'Price') }}
-                                {{ Form::number('price', '', array('class' => 'form-control')) }}
+                                {{ Form::number('price', null, array('class' => 'form-control','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
                                 {{ Form::label('name', 'Keywords') }}
                                 <br>
-                                @foreach($keywords as $keyword)
-                                    {{ Form::checkbox('keyword', $keyword->id) }}
-                                    {{ Form::label('keyword[]', $keyword->keyword) }}
-                                    <br>
-                                @endforeach
+                                {{Form::select('keywords',$keywords,$blog['keyword'],array('multiple'=>'multiple','name'=>'keyword[]','class' => 'form-control select2','data-placeholder'=>'Select a keyword'))}}
+                                <br>
+                            </div>
+                            <div class="form-group">
+                                {{ Form::label('name', 'Industries') }}
+                                <br>
+                                {{Form::select('industries',$industries,$blog['industry'],array('multiple'=>'multiple','name'=>'industry[]','class' => 'form-control select2','data-placeholder'=>'Select a Industry'))}}
+                                <br>
+
                             </div>
                             <div class="form-group">
                                 {{ Form::label('name', 'Domain Authority') }}
-                                {{ Form::number('da', '', array('class' => 'form-control')) }}
+                                {{ Form::number('da', null, array('class' => 'form-control','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
                                 {{ Form::label('name', 'FB Likes') }}
-                                {{ Form::number('fb_likes', '', array('class' => 'form-control')) }}
+                                {{ Form::number('fb_likes', null, array('class' => 'form-control','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
                                 {{ Form::label('name', 'Followers') }}
-                                {{ Form::number('follower', '', array('class' => 'form-control')) }}
+                                {{ Form::number('follower', null, array('class' => 'form-control','readonly' => 'true')) }}
                             </div>
                             <br>
                             <div class="form-group">
@@ -75,7 +78,11 @@
                                 {{ Form::radio('dropped', 'false' , true,array('class' => 'minimal-red')) }}
                             </div>
                             <br>
-                            {{ Form::submit('Add', array('class' => 'btn btn-primary')) }}
+                            <div class="form-group">
+                                {{ Form::label('name', 'flag') }}
+                                {{ Form::radio('flag', 'true' , true,array('class' => 'minimal-red')) }}
+                                {{ Form::radio('flag', 'false' , true,array('class' => 'minimal-red')) }}
+                            </div>
 
                             {{ Form::close() }}
                         </div>
@@ -101,12 +108,8 @@
                 'info': true,
                 'autoWidth': false
             })
-            $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-                checkboxClass: 'icheckbox_minimal-red',
-                radioClass: 'iradio_minimal-red'
-            })
-            // $('.textarea').wysihtml5();
+            $('.select2').select2();
         })
-    </script>
 
+    </script>
 @endsection

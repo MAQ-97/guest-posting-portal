@@ -1,4 +1,27 @@
+
+<style>
+.fa.fa-shopping-cart{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    padding: 9px 12px 7px 10px;
+    background: red;
+    height: 100%;
+    font-size: 130%;
+}
+.add-to-cart{
+    transition: 0.4s;
+    color: #fff;
+    background-color: #303030;
+    text-transform: uppercase;
+    position: relative;
+    padding-right: 52px
+}
+</style>
+
 <header class="main-header">
+
+
     <!-- Logo -->
     <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
@@ -212,9 +235,28 @@
 {{--                        </li>--}}
 {{--                    </ul>--}}
 {{--                </li>--}}
+
                 <!-- User Account: style can be found in dropdown.less -->
+
+                @hasrole('admin')
+
+                @else
+                    <li style="margin-top:10px">
+                        {{-- <form method="post" enctype="multipart/form-data" action="{{route('blog.cart')}}" >
+                        {{ csrf_field() }} --}}
+                        <input type="hidden" name="url" class="on-load-url" value="{{url('/blogs/add_to_cart_update')}}"/>
+                        <a href="{{route('blog.cart')}}"  class="add-to-cart" >
+                            <i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="cart-detail"> </span> item(s)
+                        </a>
+                        {{-- </form> --}}
+                    </li>
+                @endrole
+
+
+
                 <li class="dropdown user user-menu">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                </h1>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{asset('backend/img/user2-160x160.jpg') }}" class="user-image" alt="User Image">
                         <span class="hidden-xs">{{strtoupper(Auth::user()->name) }}</span>
                     </a>
@@ -223,26 +265,26 @@
                         <li class="user-header">
                             <img src="{{asset('backend/img/user2-160x160.jpg') }}" class="img-circle" alt="User Image">
 
-                            <p>
-                                Alexander Pierce - Web Developer
-                                <small>Member since Nov. 2012</small>
+                            <p class="custom-user-header">
+                                 {{ ucfirst(Auth::user()->name)  }}
+                                <small>Member since {{ \Carbon\Carbon::parse(Auth::user()->created_at)->format(' F. Y') }}</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
-{{--                        <li class="user-body">--}}
-{{--                            <div class="row">--}}
-{{--                                <div class="col-xs-4 text-center">--}}
-{{--                                    <a href="#">Followers</a>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-xs-4 text-center">--}}
-{{--                                    <a href="#">Sales</a>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-xs-4 text-center">--}}
-{{--                                    <a href="#">Friends</a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <!-- /.row -->--}}
-{{--                        </li>--}}
+                        {{--                        <li class="user-body">--}}
+                        {{--                            <div class="row">--}}
+                        {{--                                <div class="col-xs-4 text-center">--}}
+                        {{--                                    <a href="#">Followers</a>--}}
+                        {{--                                </div>--}}
+                        {{--                                <div class="col-xs-4 text-center">--}}
+                        {{--                                    <a href="#">Sales</a>--}}
+                        {{--                                </div>--}}
+                        {{--                                <div class="col-xs-4 text-center">--}}
+                        {{--                                    <a href="#">Friends</a>--}}
+                        {{--                                </div>--}}
+                        {{--                            </div>--}}
+                            <!-- /.row -->
+                        </li>
                         <!-- Menu Footer-->
                         <li class="user-footer">
 {{--                            <div class="pull-left">--}}

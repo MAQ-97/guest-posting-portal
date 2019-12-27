@@ -23,7 +23,7 @@
                         </div>
 
                         <div class="col-md-9">
-                            {{ Form::open(array('url' => 'blogs')) }}
+                            {{ Form::open(array( 'url' => 'blogs' , 'files' => true )) }}
                             {{--            @csrf--}}
                             <div class="form-group">
                                 {{ Form::label('link', 'Blog Link') }}
@@ -70,6 +70,12 @@
                             <div class="form-group">
                                 {{ Form::label('name', 'Followers') }}
                                 {{ Form::number('follower', '', array('class' => 'form-control')) }}
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                {{ Form::label('name', 'Upload Image') }}
+                                {{Form::file('image')}}
+                                <p class="help-block">Upload blog picture here.</p>
                             </div>
                             <br>
                             <div class="form-group">

@@ -34,13 +34,18 @@
                                     <td>{{$key+1}}</td>
                                     <td>{{ $permission->name }}</td>
                                     <td>
+                                     @hasrole('admin')
+                              
                                         <a href="{{ URL::to('permissions/'.$permission->id.'/edit') }}" class="btn btn-info pull-left" style="margin-right: 3px;">Edit</a>
 
                                         {!! Form::open(['method' => 'DELETE', 'route' => ['permissions.destroy', $permission->id] ]) !!}
                                         {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
                                         {!! Form::close() !!}
 
-                                    </td>
+                                    @else
+                                    <a href="{{ URL::to('permissions/'.$permission->id) }}" class="btn btn-success pull-left" style="margin-right: 3px;">Show</a>
+                                    @endrole
+                                    </td>                         
                                 </tr>
                                     @endforeach
                                 </tbody>

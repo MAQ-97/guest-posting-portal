@@ -1,7 +1,6 @@
 @extends('layouts.backend.app')
 
 @section('section')
-@php  @endphp
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -69,7 +68,6 @@
                                     <div class="form-group">
                                         <label for="">Note:</label>
                                         <label for="">{{$user_detail['notes']}}</label>
-                 
                                     </div>
 
                                 </div>
@@ -78,32 +76,8 @@
 
                         </div>
                         <!-- /.box-body -->
-                    </form> 
-         <form method="POST" action="{{route('orders.update',['id'=>$order_full_detail[0]['id']])}}">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="">Order Status:</label>
-                            <input type="hidden" name="_method" value="PUT">
-                            {{ csrf_field() }}
-                        </div>
-                    </div>
-                </div>
-                    <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                            <select class="form-control" name="status">
-                                <option value="pending" {{ ( $order_full_detail[0]['status'] == 'pending') ? 'selected' : '' }}>Pending</option> 
-                                <option value="confirm" {{ ( $order_full_detail[0]['status'] == 'confirm') ? 'selected' : '' }}>Confirm</option>
-                                <option value="completed" {{ ( $order_full_detail[0]['status'] == 'completed') ? 'selected' : '' }}>Completed</option>
-                              </select>
-                            </div>
-                        </div>
-                  
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-block btn-primary ">Submit</button>
-                    </div>
-            </form>
+                    </form>
+
                 </div>
             </div>
         </section>

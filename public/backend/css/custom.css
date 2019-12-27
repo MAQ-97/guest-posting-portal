@@ -7,3 +7,30 @@
 .select2-container--default .select2-selection--multiple .select2-selection__choice {
     color: #ffffff !important;
 }
+
+.custom-bg-blog{
+    background-color: firebrick;
+    color: white;
+}
+
+.min-height-0{
+    min-height: 0px !important;
+}
+
+
+a.add-to-cart {
+    width: 120px !important;
+    padding: 10px !important;
+    margin-bottom: 10px;
+}
+
+
+.alert.alert-danger , .alert.alert-success {
+    position: relative;
+    margin-top: -70px;
+    top: 15px;
+}
+
+.custom-user-header{
+    color: black !important;
+}
